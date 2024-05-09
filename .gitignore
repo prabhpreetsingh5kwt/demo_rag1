@@ -1,0 +1,7 @@
+venv/
+faiss_index/
+__pycache__
+.chainlit/
+storage/
+data/
+Z2 Service Contract.docx
