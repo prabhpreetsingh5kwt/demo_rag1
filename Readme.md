@@ -2,8 +2,8 @@
 This repo has 2 type of aplications and structure are as followed:
 <br>Langchain :</br>
 ragLangchain.py
-raglang_utils.py
+<br>raglang_utils.py</br>
 
-LLamaindex:
+<br>LLamaindex:</br>
 ragLlamaindex.py
-utils.py
+<br>utils.py</br>
