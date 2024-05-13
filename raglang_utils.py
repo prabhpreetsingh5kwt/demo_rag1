@@ -80,8 +80,8 @@ qa_prompt = ChatPromptTemplate.from_messages([
 ("system", qa_system_prompt), MessagesPlaceholder("chat_history"), ("human", '{input}'),
 
 ]
-
 )
+
 
 question_answer_chain = create_stuff_documents_chain(llm, qa_prompt) 
 rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)

@@ -88,10 +88,6 @@ if prompt := st.chat_input("Feel free to ask about your insurance policies!"):
     # Print assistant message :
     with st.chat_message("assistant"):
         st.write(str(response))
-        
+
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": str(response)})
-
-
-
-
