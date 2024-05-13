@@ -73,7 +73,7 @@ qa_system_prompt = (
     the following pieces of retrieved context to answer the 
     question. Do not convey your intent to anyone. 
     If you don't know the answer, just say that you 
-    don't know.
+    don't know. return the text in string format.
     {context}""")
 
 qa_prompt = ChatPromptTemplate.from_messages([

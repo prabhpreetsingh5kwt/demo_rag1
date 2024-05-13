@@ -6,6 +6,7 @@ from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain.chains import ( create_history_aware_retriever,create_retrieval_chain)
 from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_core.output_parsers import StrOutputParser
 from raglang_utils import rag_chain
 from config import openai_key,llm
 
@@ -71,12 +72,14 @@ if prompt := st.chat_input("Feel free to ask about your insurance policies!"):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     # response
+    parser=StrOutputParser()
     response = conversational_rag_chain.invoke(
         {"input": prompt},
         config={
             "configurable": {"session_id": "abc123"}
-        },  # constructs a key "abc123" in `store`.
+        }, # constructs a key "abc123" in `store`.
     )["answer"]
+    response=response.replace("$", "\$")
     print("populated store------------->",store)
     
     # Populates stores list for session storage
@@ -87,7 +90,8 @@ if prompt := st.chat_input("Feel free to ask about your insurance policies!"):
    
     # Print assistant message :
     with st.chat_message("assistant"):
-        st.write(str(response))
+        st.write(response)
+
 
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": str(response)})
