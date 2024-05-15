@@ -7,3 +7,9 @@ ragLangchain.py
 <br>LLamaindex:</br>
 ragLlamaindex.py
 <br>utils.py</br>
+
+# HOW TO RUN:
+1) Git clone the project.
+2) Open terminal and type pip install -r requirements.txt
+3) Open config.py file and enter your openai api key
+4) Run the command " streamlit run ragLangchain.py" in your terminal
