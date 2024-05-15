@@ -9,6 +9,7 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 import os
 
 
+
 # Imports Openai key
 OPENAI_API_KEY=openai_key
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY

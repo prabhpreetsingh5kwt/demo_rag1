@@ -27,8 +27,8 @@ st.title("Chat With Versa!")
 
 
 
-embed_model=HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
-Settings.embed_model =embed_model
+# embed_model=HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
+# Settings.embed_model =embed_model
 
 import streamlit as st
 

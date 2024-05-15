@@ -1,4 +1,5 @@
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+# from llama_index.embeddings import openai
 from llama_index.core import Settings
 from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.core import (
@@ -33,7 +34,7 @@ try:
     print('old storage')
 except:
     print('creating new storage')
-    documents = LlamaParse(result_type="markdown").load_data(r"C:\Users\prabh\OneDrive\Desktop\menuverse\demo_rag1\data\Versa_KnowledgeBase.docx")
+    documents = LlamaParse(result_type="markdown").load_data(r"C:\Users\prabh\OneDrive\Desktop\menuverse\demo_rag1\data\versa.pdf")
     index = VectorStoreIndex.from_documents(documents)
     index.storage_context.persist()
     print("saved storage")
