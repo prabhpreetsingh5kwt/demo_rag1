@@ -86,7 +86,7 @@ def main():
                for char in response:
                     yield char
                     time.sleep(0.001)
-          
+          ###
           # Write response
           with st.chat_message("assistant"):
                st.write_stream(char_response_generator(response))
