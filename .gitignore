@@ -9,3 +9,4 @@ evaluation_results.csv
 database.txt
 faiss_index/
 evaluation_results.csv
+.env

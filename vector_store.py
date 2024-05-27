@@ -4,10 +4,15 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from unstructured.partition.pdf import partition_pdf
 from langchain_openai import OpenAIEmbeddings 
-from config import openai_key
+from langchain.retrievers import MultiQueryRetriever
+from dotenv import load_dotenv
+load_dotenv()
+
+
+openai_key=os.getenv("openai_key")
 os.environ["OPENAI_API_KEY"] = openai_key
 
-embeddings = OpenAIEmbeddings()
+embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
 
 folder="data"
 def create_index():

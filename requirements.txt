@@ -8,3 +8,4 @@ uptrain
 pandas
 streamlit
 rouge_score
+python-dotenv

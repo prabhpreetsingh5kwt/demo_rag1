@@ -1,9 +1,10 @@
 # Responsible for evaluation
 import os
-from config import openai_key
-
-os.environ['OPENAI_API_KEY'] = openai_key
 import openai
+from dotenv import load_dotenv
+load_dotenv()
+
+openai_key=os.getenv("openai_key")
 
 client = openai.OpenAI()
 
