@@ -12,6 +12,7 @@ def check_status_get(task_id):
     status_url = f"{url}/{task_id}"  # assuming the status URL includes the task_id
     response = requests.get(status_url, headers=headers)
     return response
+
 def get_avatar(prompt):
 
     url = "https://api.d-id.com/talks"
