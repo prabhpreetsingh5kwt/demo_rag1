@@ -10,7 +10,6 @@ load_dotenv()
 
 
 openai_key=os.getenv("openai_key")
-os.environ["OPENAI_API_KEY"] = openai_key
 
 embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
 
@@ -18,7 +17,7 @@ folder="data"
 def create_index():
     try:
         vectorstore = FAISS.load_local("faiss_index",embeddings,allow_dangerous_deserialization=True)
-        retriever=vectorstore.as_retriever()
+        retriever=vectorstore.as_retriever(search_kwargs={'k': 3})
         print('using old index')
     except:
         print('creating new faiss data')

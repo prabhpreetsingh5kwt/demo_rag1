@@ -36,15 +36,17 @@ def main():
 
           st.session_state.messages=[]
           # st.session_state.messages.clear()
-          link_url = "https://i.ibb.co/D8Z5MHH/versa.png"
+          link_url = "https://i.ibb.co/8Y6QcVt/versa.png"
+         
           image_html = f"""
     <a href="{link_url}" target="_blank">
         <img src="{link_url}" alt="Image" style='position: fixed;bottom: 113px;
                right: 87px;
                height: 120px;
-               width: 120px !important;
+               width: 120px ;
                border-radius: 50%;
                z-index: 11;
+               object-fit:cover;
                '>
     </a>
 """
@@ -78,51 +80,73 @@ def main():
 
 
           # Get response from qa chain
+          start_time = time.time()
           response=pdf_qa({"question": prompt})
           response=str(response['answer']).replace("$","\$")
+          result_url=get_avatar(response)
+
+
+          video_html = f"""
+          <video controls autoplay  style='position: fixed;bottom: 113px;
+           right: 87px;
+           height: 120px;
+           width: 120px;
+           border-radius: 50%;
+           z-index: 11;
+           object-fit: cover;'>
+          <source src="{result_url}" type="video/mp4">
+          Your browser does not support the video tag.
+          </video>
+"""
+
+# Display the HTML in Streamlit
+          st.markdown(video_html, unsafe_allow_html=True)
+          end_time = time.time()
+          elapsed_time = end_time - start_time
 
           #streaming answers
           def char_response_generator(response):
                for char in response:
                     yield char
                     time.sleep(0.001)
-          ###
+          
           # Write response
           with st.chat_message("assistant"):
                st.write_stream(char_response_generator(response))
 
 
+          st.write(f"Time taken: {elapsed_time:.2f} seconds")
           # Add assistant response to chat history
           st.session_state.messages.append({"role": "assistant", "content": str(response)})
 
           
           # Generate evaluation
-          questions = [prompt]
-          results = []
-          for question in questions:
-               results.extend(generate_llm_response(question, vectorstore))
+          # questions = [prompt]
+          # results = []
+          # for question in questions:
+          #      results.extend(generate_llm_response(question, vectorstore))
 
 
-          result = eval_llm.evaluate(
-          data=results,
-          checks=[Evals.CONTEXT_RELEVANCE])
+          # result = eval_llm.evaluate(
+          # data=results,
+          # checks=[Evals.CONTEXT_RELEVANCE])
           #Evals.FACTUAL_ACCURACY, Evals.RESPONSE_COMPLETENESS,Evals.RESPONSE_RELEVANCE
 
           # Try to load evaluation results csv and append the result or create new csv and then append. 
-          try:
+          # try:
                
-               df = pd.read_csv("evaluation_results.csv")
-               print("reading old csv") 
-          except FileNotFoundError:
-               df = pd.DataFrame()
-               print("creating new csv") 
+          #      df = pd.read_csv("evaluation_results.csv")
+          #      print("reading old csv") 
+          # except FileNotFoundError:
+          #      df = pd.DataFrame()
+          #      print("creating new csv") 
 
 
-          df = df._append(pd.DataFrame(result),ignore_index=True)
+          # df = df._append(pd.DataFrame(result),ignore_index=True)
 
 
-          df.to_csv("evaluation_results.csv", index=False)
-          print('evaluation appended')
+          # df.to_csv("evaluation_results.csv", index=False)
+          # print('evaluation appended')
      
 
     
