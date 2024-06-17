@@ -9,3 +9,8 @@
 
 ### *Note*:
 Evaluation pipeline automatically evaluates every query on backend and saves the data in evaluation_results.csv.
+
+#### Files:
+1) Avatar.py is responsible for generating avatar.
+2) agent.py is responsible for trivia generation using agent.
+3) secondarydb folder contains all the necessary files for secondary database.
