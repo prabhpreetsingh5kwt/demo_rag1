@@ -1,7 +1,6 @@
 # Responsible for creating a conversational chain
 import os
 import uuid
-import random
 import requests
 from langchain.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
@@ -13,9 +12,6 @@ from langchain.memory import ConversationBufferMemory
 from vector_store import create_index
 from dotenv import load_dotenv
 from langchain.prompts import PromptTemplate
-from langchain.chains import SequentialChain
-from langchain.chains import LLMChain
-from langchain_openai import OpenAI
 from langchain.output_parsers import ResponseSchema
 from langchain.output_parsers import StructuredOutputParser
 load_dotenv()
@@ -25,8 +21,8 @@ openai_key=os.getenv("openai_key")
 
 
 llm=ChatOpenAI(api_key=openai_key,model="gpt-4o")
-# llm=OpenAI(model="gpt-3.5-turbo-instruct")
 
+#System prompt(Few shot prompts for versa's personality traits)
 system_template ="""
 You are Versa, an AI Virtual Sales Assistant. You embody the qualities of a top-tier salesperson: you are charismatic, very very persuasive,
 and deeply knowledgeable about the products you sell. Your demeanor is friendly and professional,
@@ -63,8 +59,6 @@ A: Absolutely! Without GAP insurance, you could be left paying the difference be
 """
 
 
-
-
 messages = [
         SystemMessagePromptTemplate.from_template(system_template),
         HumanMessagePromptTemplate.from_template("{question}")
@@ -72,6 +66,7 @@ messages = [
 
 qa_prompt = ChatPromptTemplate.from_messages(messages)
 
+#Rephrased query prompt
 custom_template = """
 
 **Task Description:**
@@ -105,7 +100,8 @@ Chat History:
 Follow Up Input: {question}
 Standalone question:"""
 CONDENSE_QUESTION_PROMPT_CUSTOM = PromptTemplate.from_template(custom_template)  
-vectorstore,retriever=create_index()
+vectorstore=create_index()
+retriever=vectorstore.as_retriever(search_kwargs={'k': 3})
 memory = ConversationBufferMemory(memory_key="chat_history",output_key="answer", return_messages=True)
 pdf_qa = ConversationalRetrievalChain.from_llm(llm, retriever=retriever, memory=memory ,
  combine_docs_chain_kwargs={"prompt": qa_prompt},return_generated_question=True,condense_question_prompt=CONDENSE_QUESTION_PROMPT_CUSTOM,verbose=True)
@@ -140,7 +136,7 @@ def generate_unique_filename():
     while True:
         unique_id = uuid.uuid4()
         video_name = f'video_{unique_id}.mp4'
-        video_path = os.path.join('videos', video_name)
+        video_path = os.path.join('secondarydb','videos', video_name)
         if not os.path.exists(video_path):
             return video_path
         
@@ -180,5 +176,4 @@ def sentiment(rephrased_query):
   messages=prompt.format_messages(query=rephrased_query,format_instructions=format_instructions)
   parserresponse=llm(messages)
   parserresponse_as_dict=output_parser.parse(parserresponse.content)
-  # print(parserresponse_as_dict)
   return parserresponse_as_dict

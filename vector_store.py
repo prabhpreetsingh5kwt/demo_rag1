@@ -1,5 +1,6 @@
 # Responsible for Creating/loading Faiss index and Vector store
 import os
+import streamlit as st
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from unstructured.partition.pdf import partition_pdf
@@ -14,11 +15,12 @@ openai_key=os.getenv("openai_key")
 embeddings = OpenAIEmbeddings(model="text-embedding-3-large",api_key=openai_key)
 
 folder="data"
+
+@st.cache_resource
 def create_index():
     try:
         vectorstore = FAISS.load_local("faiss_index",embeddings,allow_dangerous_deserialization=True)
         retriever=vectorstore.as_retriever(search_kwargs={'k': 3})
-        # print(vectorstore.similarity_search("what is gap?"))
         print('using old index')
     except:
         print('creating new faiss data')
@@ -37,7 +39,7 @@ def create_index():
                     file.write((str(el)+"\n"))
         
 
-        file_path = os.path.join("database.txt")
+        file_path = os.path.join("data/database.txt")
         with open(file_path, 'r', encoding='utf-8') as file:
             text = file.read()
 
@@ -48,5 +50,4 @@ def create_index():
 
         vectorstore.save_local("faiss_index")
         print('saved faiss data')
-    return vectorstore,retriever
-
+    return vectorstore

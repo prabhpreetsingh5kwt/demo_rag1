@@ -3,7 +3,6 @@ from langchain_openai import ChatOpenAI
 import pandas as pd
 import os
 from langchain.agents import AgentExecutor, create_openai_functions_agent
-from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.prompts import MessagesPlaceholder
 from langchain_experimental.agents.agent_toolkits.pandas.base import _get_functions_single_prompt
 from langchain_experimental.tools.python.tool import PythonAstREPLTool
@@ -17,16 +16,8 @@ load_dotenv()
 openai_key=os.getenv("openai_key")
 
 
-# st.title("Chat with CSV Assistant")
-
-from collections import deque
-
-# if "messages" not in st.session_state:
-#     st.session_state.messages = deque(maxlen=100)  # Store up to 100 messages
-
-
 def preprocess():
-    df = pd.read_excel('empty_trivia.xlsx')
+    df = pd.read_excel('data/empty_trivia.xlsx')
     template = """You are provided with a dataframe containing trivia facts. Your task is to analyze the input questions and output the relevant trivia facts in a professional conversational style. Follow these guidelines strictly:
 
 1. **Input Analysis**:

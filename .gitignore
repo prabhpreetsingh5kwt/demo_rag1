@@ -4,18 +4,7 @@ __pycache__
 .chainlit/
 storage/
 data/
-Z2 Service Contract.docx
-evaluation_results.csv
-database.txt
-faiss_index/
 evaluation_results.csv
 .env
 trials.ipynb
-semantic_srch.py 
-datasource.csv
-question_embeddings.pkl
-semantic_srch_utils.py
 videos/
-agent.py
-secondarydb/
-empty_trivia.xlsx
