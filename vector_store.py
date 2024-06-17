@@ -11,13 +11,14 @@ load_dotenv()
 
 openai_key=os.getenv("openai_key")
 
-embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
+embeddings = OpenAIEmbeddings(model="text-embedding-3-large",api_key=openai_key)
 
 folder="data"
 def create_index():
     try:
         vectorstore = FAISS.load_local("faiss_index",embeddings,allow_dangerous_deserialization=True)
         retriever=vectorstore.as_retriever(search_kwargs={'k': 3})
+        # print(vectorstore.similarity_search("what is gap?"))
         print('using old index')
     except:
         print('creating new faiss data')

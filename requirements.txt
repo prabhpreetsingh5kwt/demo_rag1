@@ -9,3 +9,5 @@ pandas
 streamlit
 rouge_score
 python-dotenv
+requests
+sentence-transformers

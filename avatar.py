@@ -4,7 +4,7 @@ url = "https://api.d-id.com/talks"
 headers = {
         "accept": "application/json",
         "content-type": "application/json",
-         "authorization": "Basic WVc1cmRYTm9OV3QzZEVCbmJXRnBiQzVqYjIwOkpKTWhxX2d4dVhjejRUYWg3QU9mSQ=="
+         "authorization": "Basic c2FoaWJwcmVldEA1a3dlYnRlY2guY29t:z0kCkEWR9kQurZrunXDIT"
     }
 
 def check_status_get(task_id):
@@ -17,7 +17,7 @@ def get_avatar(prompt):
 
     url = "https://api.d-id.com/talks"
 
-    payload = { "source_url": "https://i.ibb.co/8Y6QcVt/versa.png"
+    payload = { "source_url": "https://i.ibb.co/0mNLXyn/versa.png"
             ,"script": {
             "type": "text",
             "subtitles": "false",
@@ -29,7 +29,7 @@ def get_avatar(prompt):
     headers = {
         "accept": "application/json",
         "content-type": "application/json",
-        "authorization": "Basic WVc1cmRYTm9OV3QzZEVCbmJXRnBiQzVqYjIwOkpKTWhxX2d4dVhjejRUYWg3QU9mSQ=="
+        "authorization": "Basic c2FoaWJwcmVldEA1a3dlYnRlY2guY29t:z0kCkEWR9kQurZrunXDIT"
     }
 
     response1 = requests.post(url, json=payload, headers=headers)
