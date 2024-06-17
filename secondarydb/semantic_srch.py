@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import os
 import time
 load_dotenv() 
-from secondarydb.semantic_srch_utils import match_datasource,get_base64_video
+from semantic_srch_utils import match_datasource,get_base64_video
 openai_key=os.getenv("openai_key")
 
 # Streamlit app

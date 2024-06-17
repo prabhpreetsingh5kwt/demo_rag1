@@ -26,17 +26,15 @@ def create_embeddings():
 
 @st.cache_resource
 def load_model_and_embeddings():
-    try:
+ 
         model = SentenceTransformer('all-MiniLM-L6-v2')
         with open('question_embeddings.pkl', 'rb') as f:
             question_embeddings = pickle.load(f)
         df = pd.read_csv("datasource.csv")
         return model, question_embeddings, df
-    except Exception as e:
-         print(f'error in loading model or ques embeddings{e}')
+   
 
-
-#semantic similarity of questions and user query
+#semantic similarity of questions and user
 def match_datasource(prompt):
     model, question_embeddings, df = load_model_and_embeddings()
 
