@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import os
 import time
 load_dotenv() 
-from semantic_srch_utils import match_datasource,get_base64_video
+from semantic_srch_utils import search_with_faiss,get_base64_video
 openai_key=os.getenv("openai_key")
 
 # Streamlit app
@@ -13,7 +13,7 @@ def main():
     if "messages" not in st.session_state:
         st.session_state.messages=[]
 
-        st.session_state.messages.append({"role": "assistant", "content": 'Hello Kito, what can i help you with?'})
+        st.session_state.messages.append({"role": "assistant", "content": 'Hi, what can i help you with today?'})
 
     # @st.cache(allow_output_mutation=True)
     st.cache_data()
@@ -60,7 +60,7 @@ def main():
         st.session_state.messages.append({"role": "user", "content": prompt})
     
         # Semantic match to get response and video path for query 
-        response,video_path=match_datasource(prompt)
+        response,video_path,score=search_with_faiss(prompt)
         st.session_state.messages.append({"role": "assistant", "content": str(response)})
         print(video_path)
    
@@ -103,6 +103,7 @@ def main():
         # Write response
         with st.chat_message("assistant"):
             st.write_stream(char_response_generator(response))
+            st.write(score)
 if __name__ == "__main__":
     main()
 

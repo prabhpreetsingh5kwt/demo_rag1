@@ -11,3 +11,6 @@ rouge_score
 python-dotenv
 requests
 sentence-transformers
+langchain-experimental
+pymongo[srv]
+langchain-mongodb

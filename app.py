@@ -10,6 +10,7 @@ from app_utils import download_video,check_and_create_csv,append_to_csv,generate
 import urllib.request
 from agent import preprocess
 from avatar import get_avatar
+from langchain_mongodb.chat_message_histories import MongoDBChatMessageHistory
 
 load_dotenv()
 
@@ -25,6 +26,15 @@ os.makedirs('videos', exist_ok=True)
 
 
 def main():
+     session=st.text_input('enter your session name')
+     memory = MongoDBChatMessageHistory(connection_string="mongodb://localhost:27017/",session_id=session)
+#      chat_message_history = MongoDBChatMessageHistory(
+#     session_id=session,
+#     connection_string="mongodb://mongo_user:password123@mongo:27017",
+#     database_name="my_db",
+#     collection_name="chat_histories",
+# )
+
      name='Prabh'
      st.title("Chat with Versa Using Langchain!")
 
@@ -51,7 +61,7 @@ def main():
           st.markdown(image_html, unsafe_allow_html=True)
 
           # Clear conversational buffer memory
-          pdf_qa.memory.clear()
+          # pdf_qa.memory.clear()
 
           
                # name=st.text_input('name')
@@ -80,7 +90,10 @@ def main():
 
           # Get response from qa chain
           start_time = time.time()
-          response=pdf_qa({"question": prompt})
+          response=pdf_qa({"question": prompt,"chat_history": memory.messages})
+          # st.write(response)
+          memory.add_user_message(response["question"])
+          memory.add_ai_message(response["answer"])
           rephrased_query=response['generated_question']
           response=str(response['answer']).replace("$","\$")
           print(rephrased_query)          

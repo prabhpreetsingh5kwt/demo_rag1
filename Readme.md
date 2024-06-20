@@ -9,6 +9,7 @@
 
 ### *Note*:
 Evaluation pipeline automatically evaluates every query on backend and saves the data in evaluation_results.csv.
+To run, add a .env file and add openai key, and langsmith key.
 
 #### Files:
 1) Avatar.py is responsible for generating avatar.

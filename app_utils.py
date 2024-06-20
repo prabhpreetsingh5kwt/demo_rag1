@@ -14,6 +14,8 @@ from dotenv import load_dotenv
 from langchain.prompts import PromptTemplate
 from langchain.output_parsers import ResponseSchema
 from langchain.output_parsers import StructuredOutputParser
+from langchain.memory import MongoDBChatMessageHistory
+
 load_dotenv()
 
 
@@ -102,8 +104,9 @@ Standalone question:"""
 CONDENSE_QUESTION_PROMPT_CUSTOM = PromptTemplate.from_template(custom_template)  
 vectorstore=create_index()
 retriever=vectorstore.as_retriever(search_kwargs={'k': 3})
-memory = ConversationBufferMemory(memory_key="chat_history",output_key="answer", return_messages=True)
-pdf_qa = ConversationalRetrievalChain.from_llm(llm, retriever=retriever, memory=memory ,
+# memory = MongoDBChatMessageHistory(connection_string="mongodb+srv://prabhpreets5kwt:w5jtynqcht6sq3r9@cluster0.ma2wfua.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",session_id="test1")
+# memory = ConversationBufferMemory(memory_key="chat_history",output_key="answer", return_messages=True)
+pdf_qa = ConversationalRetrievalChain.from_llm(llm, retriever=retriever,
  combine_docs_chain_kwargs={"prompt": qa_prompt},return_generated_question=True,condense_question_prompt=CONDENSE_QUESTION_PROMPT_CUSTOM,verbose=True)
 
 def download_video(url, save_path):
