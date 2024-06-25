@@ -15,7 +15,6 @@ def main():
 
         st.session_state.messages.append({"role": "assistant", "content": 'Hi, what can i help you with today?'})
 
-    # @st.cache(allow_output_mutation=True)
     st.cache_data()
     # This function loads the image and converts it into readable format
     def get_base64_image(image_path):
@@ -42,6 +41,7 @@ def main():
         '>
         </a>
         """
+    
     # Show static image of Versa
     st.markdown(image_html, unsafe_allow_html=True)
 
@@ -63,16 +63,8 @@ def main():
         response,video_path,score=search_with_faiss(prompt)
         st.session_state.messages.append({"role": "assistant", "content": str(response)})
         print(video_path)
-   
-    
-        # Show Versa
-        # def get_base64_video(video_path):
-        #     with open(video_path, "rb") as file:
-        #         video_data = file.read()
-        #         print('base64 video path',video_path)
-        #         encoded_video = base64.b64encode(video_data).decode("utf-8")
-        #     return encoded_video
 
+        #show video
         video_base64 = get_base64_video(video_path)
         video_html = f"""
         <video controls autoplay  style='position: fixed;bottom: 113px;
@@ -101,9 +93,9 @@ def main():
         
 
         # Write response
+        st.write(score)
         with st.chat_message("assistant"):
             st.write_stream(char_response_generator(response))
-            st.write(score)
 if __name__ == "__main__":
     main()
 

@@ -9,13 +9,13 @@ from langchain_experimental.tools.python.tool import PythonAstREPLTool
 from langchain_openai import ChatOpenAI
 from langchain.prompts import SystemMessagePromptTemplate
 from langchain.prompts import PromptTemplate
-
 from dotenv import load_dotenv
+
 load_dotenv()
 
 openai_key=os.getenv("openai_key")
 
-
+#trivia agent tool
 def preprocess():
     df = pd.read_excel('data/empty_trivia.xlsx')
     template = """You are provided with a dataframe containing trivia facts. Your task is to analyze the input questions and output the relevant trivia facts in a professional conversational style. Follow these guidelines strictly:

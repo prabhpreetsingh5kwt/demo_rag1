@@ -5,7 +5,6 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from unstructured.partition.pdf import partition_pdf
 from langchain_openai import OpenAIEmbeddings 
-from langchain.retrievers import MultiQueryRetriever
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -20,7 +19,6 @@ folder="data"
 def create_index():
     try:
         vectorstore = FAISS.load_local("faiss_index",embeddings,allow_dangerous_deserialization=True)
-        retriever=vectorstore.as_retriever(search_kwargs={'k': 3})
         print('using old index')
     except:
         print('creating new faiss data')

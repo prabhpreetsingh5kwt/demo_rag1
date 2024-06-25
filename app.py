@@ -6,8 +6,9 @@ import time
 import streamlit as st 
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
-from app_utils import download_video,check_and_create_csv,append_to_csv,generate_unique_filename,pdf_qa,sentiment
+from app_utils import check_and_create_csv,append_to_csv,generate_unique_filename,pdf_qa,sentiment
 import urllib.request
+from secondarydb.semantic_srch_utils import search_with_faiss
 from agent import preprocess
 from avatar import get_avatar
 from langchain_mongodb.chat_message_histories import MongoDBChatMessageHistory
@@ -27,15 +28,9 @@ os.makedirs('videos', exist_ok=True)
 
 def main():
      session=st.text_input('enter your session name')
-     memory = MongoDBChatMessageHistory(connection_string="mongodb://localhost:27017/",session_id=session)
-#      chat_message_history = MongoDBChatMessageHistory(
-#     session_id=session,
-#     connection_string="mongodb://mongo_user:password123@mongo:27017",
-#     database_name="my_db",
-#     collection_name="chat_histories",
-# )
+     memory = MongoDBChatMessageHistory(connection_string="mongodb+srv://prabhpreets5kwt:w5jtynqcht6sq3r9@cluster0.ma2wfua.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",session_id=session)
 
-     name='Prabh'
+    
      st.title("Chat with Versa Using Langchain!")
 
      # On Every reload empty the messages, add versa's image, clear rag's memory and append an AI message:
@@ -60,14 +55,9 @@ def main():
 """
           st.markdown(image_html, unsafe_allow_html=True)
 
-          # Clear conversational buffer memory
-          # pdf_qa.memory.clear()
-
-          
-               # name=st.text_input('name')
           
           # Initiate Conversation and append it
-          st.session_state.messages.append({"role": "assistant", "content": f'Hello {name}, what can i help you with?'})
+          st.session_state.messages.append({"role": "assistant", "content": f'Hello, what can i help you with?'})
 
      with st.sidebar:
           state=st.text_input('state')
@@ -77,6 +67,7 @@ def main():
           with st.chat_message(message['role']):
                st.markdown(message["content"])
     
+
      #trivia agent executor     
      executor=preprocess()
 
@@ -90,28 +81,45 @@ def main():
 
           # Get response from qa chain
           start_time = time.time()
-          response=pdf_qa({"question": prompt,"chat_history": memory.messages})
-          # st.write(response)
-          memory.add_user_message(response["question"])
-          memory.add_ai_message(response["answer"])
-          rephrased_query=response['generated_question']
-          response=str(response['answer']).replace("$","\$")
-          print(rephrased_query)          
+
+
+          #semantic search:
+          response_faiss,video_path,score=search_with_faiss(prompt)
+
+          if score>0.50:
+               response=response_faiss
+               st.write(score)
+               memory.add_user_message(response["question"])
+
+          
+
+          else:
+
+
+
+               response=pdf_qa({"question": prompt,"chat_history": memory.messages})
+               rephrased_query=response['generated_question']
+               response=str(response['answer']).replace("$","\$")
+          
+          # memory.add_user_message(response["question"])
+          # memory.add_ai_message(response["answer"])
+               print(rephrased_query)          
+
 
           #sentiment analyzer and product extractor for user query which returns a query for trivia agent
-          sentiment_response=sentiment(rephrased_query)
-          if sentiment_response['sentiment']=='negative':
-               product=sentiment_response['product']
-               query=f"{product} in {state}"
-               print(query)
-          
-               #executor block for trivia agent
-               exec_response = executor.invoke({"input": query, "chat_history": []})
-               exec_response=exec_response['output']
-               exec_response=exec_response.replace("$","\$")
+               sentiment_response=sentiment(rephrased_query)
+               if sentiment_response['sentiment']=='negative':
+                    product=sentiment_response['product']
+                    query=f"{product} in {state}"
+                    print(query)
                
-               #Add trivia to response
-               response=response+' '+ '\n\n'+exec_response
+                    #executor block for trivia agent
+                    exec_response = executor.invoke({"input": query, "chat_history": []})
+                    exec_response=exec_response['output']
+                    exec_response=exec_response.replace("$","\$")
+                    
+                    #Add trivia to response
+                    response=response+' '+ '\n\n'+exec_response
 
 
           #"""pass response to avatar function and show video  on webpage""" 
@@ -158,9 +166,11 @@ def main():
           # check_and_create_csv(source)
 
           #"""Append query response and video path to secondary database"""
-          # append_to_csv(source,rephrased_query,response,video_path)          
+          # append_to_csv(source,rephrased_query,response,video_path)
+          # 
+          #         
  
-   
+          
 
 if __name__ == "__main__":
     main()

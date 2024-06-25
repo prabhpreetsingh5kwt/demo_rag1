@@ -1,20 +1,17 @@
 # Responsible for creating a conversational chain
 import os
 import uuid
-import requests
 from langchain.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 import pandas as pd
-from langchain.prompts import SystemMessagePromptTemplate , HumanMessagePromptTemplate
+from langchain.prompts import SystemMessagePromptTemplate,HumanMessagePromptTemplate
 from langchain.chains import ConversationalRetrievalChain
-from langchain.memory import ConversationBufferMemory
 from vector_store import create_index
 from dotenv import load_dotenv
 from langchain.prompts import PromptTemplate
 from langchain.output_parsers import ResponseSchema
 from langchain.output_parsers import StructuredOutputParser
-from langchain.memory import MongoDBChatMessageHistory
 
 load_dotenv()
 
@@ -94,8 +91,7 @@ Rephrase the follow-up question in the given conversation to make it a standalon
 4. For negative queries, make them specific as indicated in the examples.
 
 ---
-
-This prompt maintains the original intent while adding clarity and examples to guide the user effectively.
+**DO NOT EVER TRY TO REPHRASE GREETINGS SUCH AS "HI","HELLO,"HI VERSA",**
 
 Chat History:
 {chat_history}
@@ -104,20 +100,9 @@ Standalone question:"""
 CONDENSE_QUESTION_PROMPT_CUSTOM = PromptTemplate.from_template(custom_template)  
 vectorstore=create_index()
 retriever=vectorstore.as_retriever(search_kwargs={'k': 3})
-# memory = MongoDBChatMessageHistory(connection_string="mongodb+srv://prabhpreets5kwt:w5jtynqcht6sq3r9@cluster0.ma2wfua.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",session_id="test1")
-# memory = ConversationBufferMemory(memory_key="chat_history",output_key="answer", return_messages=True)
 pdf_qa = ConversationalRetrievalChain.from_llm(llm, retriever=retriever,
  combine_docs_chain_kwargs={"prompt": qa_prompt},return_generated_question=True,condense_question_prompt=CONDENSE_QUESTION_PROMPT_CUSTOM,verbose=True)
 
-def download_video(url, save_path):
-    
-    response = requests.get(url)
-    if response.status_code == 200:
-        with open(save_path, 'wb') as file:
-            file.write(response.content)
-        print(f"Video downloaded successfully and saved to {save_path}")
-    else:
-        print(f"Failed to download video. Status code: {response.status_code}")
 
 
 # Function to check if CSV exists and create it if not
@@ -143,40 +128,40 @@ def generate_unique_filename():
         if not os.path.exists(video_path):
             return video_path
         
-
+#sentiment for trivia passing
 def sentiment(rephrased_query):
-  sentiment_schema = ResponseSchema(name='sentiment',description="This is the sentiment which is either 'neutral' or 'negative'")
-  product_schema=ResponseSchema(name='product',description="this is the product")
-  response_schemas =[sentiment_schema,product_schema]
+    sentiment_schema = ResponseSchema(name='sentiment',description="This is the sentiment which is either 'neutral' or 'negative'")
+    product_schema=ResponseSchema(name='product',description="this is the product")
+    response_schemas =[sentiment_schema,product_schema]
 
-  output_parser = StructuredOutputParser.from_response_schemas(response_schemas)
-  format_instructions=output_parser.get_format_instructions()
-  template_string="""you are a extended warranty salesperson. take the user query below and try to rate the query sentiment. if user asks
-  about a product,or if there is discussion about the product, then the query is neutral. but if user says something negative or something which shows he is repulsive to buy the product, for example:
-  'i do not want it','i cannot afford it', ' i do not see value in it' or 'my wife will not let me buy it', then return negative. 
-  take the query below delimited by triple backticks and use it to define sentiment.
-  query:```{query}```
+    output_parser = StructuredOutputParser.from_response_schemas(response_schemas)
+    format_instructions=output_parser.get_format_instructions()
+    template_string="""you are a extended warranty salesperson. take the user query below and try to rate the query sentiment. if user asks
+    about a product,or if there is discussion about the product, then the query is neutral. but if user says something negative or something which shows he is repulsive to buy the product, for example:
+    'i do not want it','i cannot afford it', ' i do not see value in it' or 'my wife will not let me buy it', then return negative. 
+    take the query below delimited by triple backticks and use it to define sentiment.
+    query:```{query}```
 
-  then from the query, extract the insurance product.
-  The possible products are:
-      - GAP
-      - GPS
-      - Theft Protection/Recovery
-      - Windshield Protection
-      - Dent & Ding
-      - Appearance Protection
-      - Lifetime Coverage
-      - Prepaid Maintenance
-      - Lease Wear & Tear
-      - Key Coverage/Replacement
-      - Tire & Wheel
-      return only product name for exa
-      : GAP, GPS, Dend & Ding etc.
+    then from the query, extract the insurance product.
+    The possible products are:
+        - GAP
+        - GPS
+        - Theft Protection/Recovery
+        - Windshield Protection
+        - Dent & Ding
+        - Appearance Protection
+        - Lifetime Coverage
+        - Prepaid Maintenance
+        - Lease Wear & Tear
+        - Key Coverage/Replacement
+        - Tire & Wheel
+        return only product name for exa
+        : GAP, GPS, Dend & Ding etc.
 
-    {format_instructions}
-    """
-  prompt=ChatPromptTemplate.from_template(template=template_string)
-  messages=prompt.format_messages(query=rephrased_query,format_instructions=format_instructions)
-  parserresponse=llm(messages)
-  parserresponse_as_dict=output_parser.parse(parserresponse.content)
-  return parserresponse_as_dict
+        {format_instructions}
+        """
+    prompt=ChatPromptTemplate.from_template(template=template_string)
+    messages=prompt.format_messages(query=rephrased_query,format_instructions=format_instructions)
+    parserresponse=llm(messages)
+    parserresponse_as_dict=output_parser.parse(parserresponse.content)
+    return parserresponse_as_dict
