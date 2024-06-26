@@ -23,7 +23,7 @@ To install and run Versa, follow these steps:
 
 2. **Set Up Python Environment**: Ensure you have Python 3.10 installed. You can create a virtual environment using:
     ```sh
-    python3.10 -m venv venv
+    python -m venv venv
     source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
     ```
 
@@ -34,8 +34,8 @@ To install and run Versa, follow these steps:
 
 4. **Configure Environment Variables**: Create a `.env` file in the project root and add your OpenAI and Langchain API keys:
     ```sh
-    OPENAI_KEY="your_openai_key"
-    LANGCHAIN_API_KEY="your_langchain_api_key"
+    openai_key="your_openai_key"
+    langchain_api_key="your_langchain_api_key"
     ```
 
 5. **Run the Application**:

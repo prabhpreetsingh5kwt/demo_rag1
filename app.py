@@ -19,8 +19,8 @@ openai_key=os.getenv("openai_key")
 langchain_api_key=os.getenv("langchain_api_key")
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ['LANGCHAIN_PROJECT'] = "Versa" 
-llm=ChatOpenAI()
-client = openai.OpenAI()
+llm=ChatOpenAI(api_key=openai_key)
+client = openai.OpenAI(api_key=openai_key)
 
 # Create a directory for storing videos if it doesn't exist
 os.makedirs('videos', exist_ok=True)
@@ -89,7 +89,7 @@ def main():
           if score>0.50:
                response=response_faiss
                st.write(score)
-               memory.add_user_message(response["question"])
+               memory.add_user_message(response)
 
           
 
