@@ -1,5 +1,4 @@
 venv/
-faiss_index/
 __pycache__
 .chainlit/
 storage/
