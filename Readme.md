@@ -15,4 +15,4 @@ Python Version python==3.10
 #### Files:
 1) Avatar.py is responsible for generating avatar.
 2) agent.py is responsible for trivia generation using agent.
-3) secondarydb folder contains all the necessary files for secondary database.
+3) secondarydb folder contains all the necessary files for secondary database.`
