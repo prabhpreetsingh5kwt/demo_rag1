@@ -16,9 +16,9 @@ To install and run Versa, follow these steps:
 
 1. **Clone the Repository**:
     ```sh
-    git clone https://github.com/yourusername/versa.git
-    git checkout RagUnstructured2.1
-    cd versa
+    git clone https://github.com/prabhpreetsingh5kwt/demo_rag1.git
+    git checkout RagMongo2.2.3
+    cd demo_rag1
     ```
 
 2. **Set Up Python Environment**: Ensure you have Python 3.10 installed. You can create a virtual environment using:
@@ -42,6 +42,21 @@ To install and run Versa, follow these steps:
     ```sh
     streamlit run app.py
     ```
+
+# Download Required Files
+
+Some files are too large to be stored in this repository. Please download them from the following links:
+
+- [Data Folder](https://drive.google.com/drive/folders/18l-1sALXGT6xp4mBnNHQ051Y8lN8FZ2h?usp=sharing)
+- [FAISS Index](https://drive.google.com/drive/folders/1JeojO0A495s3NTnaJpYgy_BXn93TxbgI?usp=sharing)
+
+After downloading, place the files in the appropriate directories as follows:
+
+```sh
+data/     -> Place the contents of the Data Folder here
+faiss_index/ -> Place the FAISS Index file here
+
+
 
 ## Usage
 

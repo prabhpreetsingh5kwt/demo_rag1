@@ -168,8 +168,8 @@ def main():
           #"""Append query response and video path to secondary database"""
           # append_to_csv(source,rephrased_query,response,video_path)
           # 
-          #         
- 
+          # NEED TO CREATE EMBEDDINGS AGAIN AND UPDATE THE FAISS INDEX FOR SECONDARYDB         
+
           
 
 if __name__ == "__main__":
