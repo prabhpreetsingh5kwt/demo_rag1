@@ -74,8 +74,7 @@ faiss_index/ -> Place the FAISS Index file here
 3. **Langchain Trivia Agent**:
     - The trivia agent uses the REPL tool to add trivia based on the sentiment of the query. This enhances the user experience by providing interesting and relevant trivia.
 
-
-
+![Architecture](Rag_architecture.jpg)
 ## Files
 
 1. **`avatar.py`**: Responsible for generating avatar.
