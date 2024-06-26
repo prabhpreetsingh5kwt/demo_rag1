@@ -8,7 +8,7 @@ from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 from app_utils import check_and_create_csv,append_to_csv,generate_unique_filename,pdf_qa,sentiment
 import urllib.request
-from secondarydb.semantic_srch_utils import search_with_faiss
+from secondarydb.semantic_srch_utils import search_with_faiss,create_embeddings_write_index
 from agent import preprocess
 from avatar import get_avatar
 from langchain_mongodb.chat_message_histories import MongoDBChatMessageHistory
@@ -89,7 +89,8 @@ def main():
           if score>0.50:
                response=response_faiss
                st.write(score)
-               memory.add_user_message(response)
+               memory.add_user_message(prompt)
+               memory.add_ai_message(response)
 
           
 
@@ -120,6 +121,9 @@ def main():
                     
                     #Add trivia to response
                     response=response+' '+ '\n\n'+exec_response
+
+                    memory.add_user_message(rephrased_query)
+                    memory.add_ai_message(response)
 
 
           #"""pass response to avatar function and show video  on webpage""" 
@@ -168,7 +172,8 @@ def main():
           #"""Append query response and video path to secondary database"""
           # append_to_csv(source,rephrased_query,response,video_path)
           # 
-          # NEED TO CREATE EMBEDDINGS AGAIN AND UPDATE THE FAISS INDEX FOR SECONDARYDB         
+          # NEED TO CREATE EMBEDDINGS AGAIN AND UPDATE THE FAISS INDEX FOR SECONDARYDB
+          # create_embeddings_write_index()         
 
           
 
