@@ -9,7 +9,7 @@ Versa is a QnA Retrieval-Augmented Generation (RAG) application designed for the
 - **Video Generation**: Generates videos of Versa speaking the answers.
 - **Unique Session Handling**: Each user session is uniquely tracked using MongoDB, ensuring personalized interactions.
 - **Langchain Trivia Agent**: Uses the REPL tool to add trivia according to the sentiment of the query.
-
+- **Auto-Update**: If any question goes to Rag, Secondary database is automatically updated
 ## Installation
 
 To install and run Versa, follow these steps:
@@ -58,6 +58,8 @@ faiss_index/ -> Place the FAISS Index file here
 
 
 
+```
+
 ## Usage
 
 1. **Enter User Details**:
@@ -72,38 +74,7 @@ faiss_index/ -> Place the FAISS Index file here
 3. **Langchain Trivia Agent**:
     - The trivia agent uses the REPL tool to add trivia based on the sentiment of the query. This enhances the user experience by providing interesting and relevant trivia.
 
-## How To Run
 
-1. **Clone the Latest Branch**:
-    ```sh
-    git clone -b RagUnstructured2.1 https://github.com/yourusername/versa.git
-    cd versa
-    ```
-
-2. **Install Dependencies**:
-    ```sh
-    pip install -r requirements.txt
-    ```
-
-3. **Create FAISS Index**: Once the FAISS index is created, it will show in your directory.
-
-4. **Configure Environment Variables**: Create a `.env` file and add the OpenAI and Langchain API keys:
-    ```sh
-    OPENAI_KEY="your_openai_key"
-    LANGCHAIN_API_KEY="your_langchain_api_key"
-    ```
-
-5. **Run the Application**:
-    ```sh
-    streamlit run app.py
-    ```
-
-### Note
-The evaluation pipeline automatically evaluates every query on the backend and saves the data in `evaluation_results.csv`.
-
-To run, add a `.env` file with your OpenAI key and Langsmith key.
-
-**Python Version**: `python==3.10`
 
 ## Files
 
@@ -113,14 +84,13 @@ To run, add a `.env` file with your OpenAI key and Langsmith key.
 
 ## Configuration
 
-- **MongoDB**: Ensure MongoDB is running and accessible. The connection string can be configured in the `.env` file.
 - **FAISS Index**: The FAISS index is used for efficient similarity search on embeddings.
 
 ## Notes
 
 - Ensure your environment variables are correctly set up to avoid authentication issues.
 - The pre-created database significantly speeds up the response time by avoiding the need for generating new responses on each query.
-- For best results, keep the database updated with frequently asked questions and their corresponding answers and videos.
+- For best results, the database is updated with frequently asked questions and their corresponding answers and videos.
 
 ## Disclaimer
 
